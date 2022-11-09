@@ -8,12 +8,15 @@ import PIL
 import numpy as np
 from PIL import Image, ImageFont
 from PIL import ImageDraw
-
-from utils import save_concat_images
+import scipy.misc as misc
 
 CANVAS_SIZE = 256
 CHAR_SIZE = 256
 EMBEDDING_DIM = 128
+
+def save_concat_images(imgs, img_path):
+    concated = np.concatenate(imgs, axis=1)
+    misc.imsave(img_path, concated)
 
 
 def _draw_single_char(font, ch, width, height):

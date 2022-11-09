@@ -2,7 +2,7 @@
 # coding:utf-8
 
 import sys
-import cv2
+# import cv2
 import os, random, glob
 from preprocessing_helper import draw_single_char, CANVAS_SIZE, CHAR_SIZE, draw_example_src_only, draw_single_char_by_font
 from PIL import Image, ImageEnhance, ImageFont
@@ -13,7 +13,7 @@ from char_info import get_component
 img_folder = sys.argv[1]  # img_folder: crawler
 dst_folder_all = sys.argv[2]  # img_all
 dst_folder_cns = sys.argv[3]  # img_all_cns
-src_font = "SimSun.ttf"
+src_font = "preprocess/SimSun.ttf"
 
 def get_char(folder_name):
     char_list = []
@@ -36,37 +36,11 @@ def get_union_and_intersect(img_folder, folder_list):
     intersect_list = list(set(list0) & set(list1) & set(list2) & set(list3) & set(list4) & set(list5) & set(list6))
     return union_list, intersect_list
 
-"""
-def getSharedCharacter(folder_list, img_folder):
-    charDict = dict()
-    sharedChar = []
-    tmpChar = []
-    unionChar = []
-    intersectChar = []
-    # filenameList = []
-    for idx, folder in enumerate(folder_list):
-        for filename in os.listdir(os.path.join(img_folder, folder)):
-            if '.png' in filename:
-                char = filename[0]
-                tmpChar.append(char)
-                
-                if idx == 0 and char not in charDict:
-                    charDict[char] = 1
-                elif idx != 0 and char in charDict:
-                    charDict[char] += 1
-                else:
-                    continue
-                
-    for idx, (key, value) in enumerate(charDict.items()):
-        if value == 7:
-            sharedChar.append(key)
 
-    return sharedChar
-"""
-
-
-def select_test_character(intersect_list):
-    return random.sample(intersect_list, 1000)
+def clear_folder(folder_path: str):
+    files = glob.glob(os.path.join(folder_path, '*'))
+    for f in files:
+        os.remove(f)
 
 
 # output image file name: [category]_[count].jpg
@@ -77,12 +51,20 @@ def generatePairImg(selectedTestChar, save_folder_all, save_folder_cns, folder_l
     test_cns = save_folder_cns + '/test/'
     if not os.path.exists(train):
         os.makedirs(train)
+    else:
+        clear_folder(train)
     if not os.path.exists(test):
         os.makedirs(test)
+    else:
+        clear_folder(test)
     if not os.path.exists(train_cns):
         os.makedirs(train_cns)
+    else:
+        clear_folder(train_cns)
     if not os.path.exists(test_cns):
         os.makedirs(test_cns)
+    else:
+        clear_folder(test_cns)
 
     font = ImageFont.truetype(src_font, CHAR_SIZE)
     count_test = 1

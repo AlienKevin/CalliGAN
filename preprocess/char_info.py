@@ -34,7 +34,7 @@ def get_component(char):
 			if len(split) == 2:
 				char_dict[split[1]] = split[0]
 
-	cns = char_dict.get(char)
+	cns = char_dict.get(format(ord(char), '04X'))
 
 	cns_component = 'CNS_component.txt'
 	component_dict = dict()

@@ -24,17 +24,8 @@ def get_char(folder_name):
     return char_list
 
 
-def get_union_and_intersect(img_folder, folder_list):
-    list0 = get_char(os.path.join(img_folder, folder_list[0]))
-    list1 = get_char(os.path.join(img_folder, folder_list[1]))
-    list2 = get_char(os.path.join(img_folder, folder_list[2]))
-    list3 = get_char(os.path.join(img_folder, folder_list[3]))
-    list4 = get_char(os.path.join(img_folder, folder_list[4]))
-    list5 = get_char(os.path.join(img_folder, folder_list[5]))
-    list6 = get_char(os.path.join(img_folder, folder_list[6]))
-    union_list = list(set(list0) | set(list1) | set(list2) | set(list3) | set(list4) | set(list5) | set(list6))
-    intersect_list = list(set(list0) & set(list1) & set(list2) & set(list3) & set(list4) & set(list5) & set(list6))
-    return union_list, intersect_list
+def select_test_character(intersect_list):
+    return random.sample(intersect_list, 1000)
 
 
 def clear_folder(folder_path: str):
@@ -106,20 +97,9 @@ def generatePairImg(selectedTestChar, save_folder_all, save_folder_cns, folder_l
             except OSError:
                 with open(save_folder_all + '/error_msg.txt', 'a') as f:
                     f.write("cannot open image file %s \n" %(filename))
-            except IOError:
-                with open(save_folder_all + '/error_msg.txt', 'a') as f:
-                    f.write("cannot open image file %s \n" %(filename))
 
 
-folder_list = ['歐陽詢-九成宮', '歐陽詢-皇甫誕', '虞世南', '褚遂良', '柳公權', '顏真卿多寶塔體', '顏真卿-顏勤禮碑']
-union_list, intersect_list = get_union_and_intersect(img_folder, folder_list)
-print("union_list len: ", len(union_list))
-# union_list len:  6548
-print("intersect_list len: ", len(intersect_list))
-# intersect_list len:  5560
+folder_list = ['edukai']
+test_chars = get_char(os.path.join(img_folder, 'edukai'))
 
-# sharedChar = getSharedCharacter(folder_list, img_folder)
-# print(len(sharedChar)) 3857
-generatePairImg(selectedTestChar=select_test_character(intersect_list), save_folder_all=dst_folder_all, save_folder_cns=dst_folder_cns, folder_list=folder_list, img_folder=img_folder)
-
-
+generatePairImg(selectedTestChar=select_test_character(test_chars), save_folder_all=dst_folder_all, save_folder_cns=dst_folder_cns, folder_list=folder_list, img_folder=img_folder)

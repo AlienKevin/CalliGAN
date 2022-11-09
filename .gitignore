@@ -1,3 +1,7 @@
 __pycache__
 .vscode
 .DS_store
+crawler/edukai
+crawler/source_han_sans
+img_all
+img_all_cns

@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 from __future__ import absolute_import
-import models.parser
+import models.parser as parser
 import tensorflow as tf
 from models.unet_onehot_cns_font_attention import UNet
 
 
 def main(_):
     args = parser.arg_parse()
-    config = tf.ConfigProto()
+    config = tf.compat.v1.ConfigProto()
     config.gpu_options.allow_growth = True
 
-    with tf.Session(config=config) as sess:
+    with tf.compat.v1.Session(config=config) as sess:
         model = UNet(batch_size=args.batch_size, embedding_num=args.embedding_num, cns_embedding_size=args.cns_embedding_size)
         model.register_session(sess)
         model.build_model(is_training=False, inst_norm=args.inst_norm)
@@ -36,4 +36,4 @@ def main(_):
 
 
 if __name__ == '__main__':
-    tf.app.run()
+    tf.compat.v1.app.run()

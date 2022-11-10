@@ -4,7 +4,7 @@ from __future__ import absolute_import
 
 import tensorflow as tf
 import numpy as np
-import scipy.misc as misc
+import imageio.v3 as iio
 import os
 import time
 from collections import namedtuple
@@ -558,7 +558,7 @@ class UNet(object):
         tf.compat.v1.enable_v2_behavior()
 
         # A default TF 2.x summary writer is available.
-        writer = tf.summary.create_file_writer(self.log_dir)
+        writer = tf.summary.create_file_writer(self.log_dir if hasattr(self, 'log_dir') else '/tmp/')
         # A step is set for the writer.
         with writer.as_default(step=0):
             d_loss_real_summary = tf.summary.scalar("d_loss_real", d_loss_real)
@@ -723,7 +723,7 @@ class UNet(object):
         sample_img_path = os.path.join(
             model_sample_dir, "sample_%02d_%04d.jpg" % (epoch, step)
         )
-        misc.imsave(sample_img_path, merged_pair)
+        iio.imwrite(sample_img_path, merged_pair)
         return l1_loss
 
     def validate_all(self, val_batch_iter):
@@ -774,8 +774,9 @@ class UNet(object):
             fake_imgs = self.generate_fake_samples(
                 source_imgs, labels, cns_code, seq_len
             )[0]
-            img_path = os.path.join(save_dir, "inferred_%04d.jpg" % count)
-            misc.imsave(img_path, fake_imgs.squeeze())
+            save_imgs(fake_imgs, count)
+            # img_path = os.path.join(save_dir, "inferred_%04d.jpg" % count)
+            # iio.imwrite(img_path, fake_imgs.squeeze())
             count += 1
         """
         for labels, source_imgs in source_iter:

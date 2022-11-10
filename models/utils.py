@@ -79,7 +79,8 @@ def merge(images, size):
 
 def save_concat_images(imgs, img_path):
     concated = np.concatenate(imgs, axis=1)
-    iio.imwrite(img_path, concated)
+    concated_3_channels = (np.tile(concated, [1, 1, 3]) * 255).astype(np.uint8)
+    iio.imwrite(img_path, concated_3_channels)
 
 
 """
